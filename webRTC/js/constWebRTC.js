@@ -18,4 +18,4 @@ const peerConnectionConfig = {
 }
 var domainLive = `${window.location.protocol}//${window.location.hostname}${(window.location.port ? ':' + window.location.port : ':7111')}`;
 if (window.location.protocol === 'https:') domainLive = `${window.location.protocol}//${window.location.hostname}`;
-//domainLive = `https://room.kyoly.online`;
+domainLive = `https://room.kyoly.online`;
