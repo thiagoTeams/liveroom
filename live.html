@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phòng live (Mesh)</title>
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/assets/bootstrap.min.css" rel="stylesheet">
+    <!-- WebRTC -->
+    <link href='https://fonts.googleapis.com/css?family=Hind:300|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/webRTC/css/live_mesh_room.css">
+</head>
+<body>
+
+<!-- CONTAINER -->
+<div class="main-container container-fluid">
+    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <h1 class="page-title">Phòng live (Mesh)</h1>
+    </div>
+    <!-- PAGE-HEADER END -->
+
+    <!-- ROW-1 OPEN -->
+    <!-- Row -->
+    <div class="row ">
+        <div class="col-md-12">
+            <!-- CARD TABLE-->
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="row">
+                        <label class="col-md-3 form-label" style="margin-top:1em;">ID Phòng Live <b style="color: red;">(*)</b></label>
+                        <div class="col-md-4">
+                            <input id="_roomId" type="text" size="40" value="" class="form-control" placeholder="ID phòng live" required style="margin-top:0.5em;">
+                        </div>
+                        <div class="col-md-5" style="display:flex;justify-content:center;margin-top:0.5em;">
+                            <button id="_btnCreateOrJoinRoom" type="button" class="btn btn-success" onclick="createOrJoinRoom();">Tham gia</button>
+                            <button id="_btnLeaveRoom" type="button" class="btn btn-warning" onclick="leaveRoom();" disabled style="margin-left: 1em;">Rời khỏi</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="row">
+                        <div class="col-md-12" style="display:flex;justify-content:flex-start;margin-top:0.5em;">
+                            <button id="_btnOnShareScreen"  type="button" class="btn btn-success" onclick="swichOnScreen();">Chia sẽ màn hình</button>
+                            <button id="_btnOffShareScreen" type="button" class="btn btn-warning" onclick="swichOffScreen();" style="margin-left: 1em;">Dừng chia sẽ màn hình</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h1 id="_roomStatus" class="room-status" style="margin-top:0.5em;margin-bottom:0.5em;"></h1>
+            </div>
+            <div class="row" style="">
+                <p id="_notification"></p>
+                <div id="videos">
+                    <div id="_videoGrid" class="grid-container" style=""></div>
+                </div>
+            </div>
+            <!-- /.CARD TABLE-->
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- CONTAINER CLOSED -->
+
+<div id="localVideo-container">
+    <video id="_localVideo" autoplay playsinline muted></video>
+</div>
+
+<!-- modal PERMISSION -->
+<div id="permissionModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered text-center" role="document" style="max-width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="permissionTitle" class="modal-title text-danger mb-20">Title</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="permissionDescription">Description</p>
+            </div>
+            <div class="modal-footer">
+                <button id="permissionConfirm" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal PERMISSION -->
+
+<!-- JQUERY JS v3.6.0 -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/assets/jquery.min.js"></script>
+<!-- BOOTSTRAP JS -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/assets/bootstrap.min.js"></script>
+<!-- JS -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/permission.js"></script>
+<script>
+    $(async function () {
+        await requestAllPermission("camera", 'Cấp quyền camera', 'Hệ thống cần có quyền camera để thực hiện chức năng', 'Bạn chưa cấp quyền, Vui lòng cấp quyền trong cài đặt của trình duyệt');
+        await requestAllPermission("microphone", 'Cấp quyền microphone', 'Hệ thống cần có quyền microphone để thực hiện chức năng', 'Bạn chưa cấp quyền, Vui lòng cấp quyền trong cài đặt của trình duyệt');
+        await requestAllPermission("screen", 'Cấp quyền chia sẽ màn hình', 'Hệ thống cần có quyền chia sẽ màn hình để thực hiện chức năng', 'Bạn chưa cấp quyền, Vui lòng cấp quyền trong cài đặt của trình duyệt');
+    });
+</script>
+<!-- Hub -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/constWebRTC.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/lib/signalr/dist/browser/signalr.min.js"></script>
+<!-- WebRTC -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/lib/webrtc_adapter/adapter-latest.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/utilsRTC.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/webrtc.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/liveMeshViewHub.js"></script>
+<script>
+    var userKey = userName = fullName = `Streamer`;
+    $(function () {
+        userKey = userName = fullName = `Streamer${Math.floor((Math.random() * 10000) + 1)}`;
+        initializeLiveRTCHubSignalR(userKey, userName, fullName, true);
+    });
+    async function createOrJoinRoom() {
+        hubCreateOrJoinRoom(userKey, userName, fullName);
+    }
+    async function leaveRoom() {
+        hubLeaveRoom(userKey, userName, fullName);
+    }
+    async function swichOnScreen() {
+        hubSwichOnScreen(userKey, userName, fullName);
+    }
+    async function swichOffScreen() {
+        hubSwichOffScreen(userKey, userName, fullName);
+    }
+</script>
+</body>
+</html>

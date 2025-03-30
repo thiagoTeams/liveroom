@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phòng xem (Mesh)</title>
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/assets/bootstrap.min.css" rel="stylesheet">
+    <!-- WebRTC -->
+    <link href='https://fonts.googleapis.com/css?family=Hind:300|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/webRTC/css/live_mesh_room.css">
+</head>
+<body>
+
+<!-- CONTAINER -->
+<div class="main-container container-fluid">
+    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <h1 class="page-title">Phòng xem (Mesh)</h1>
+    </div>
+    <!-- PAGE-HEADER END -->
+
+    <!-- ROW-1 OPEN -->
+    <!-- Row -->
+    <div class="row ">
+        <div class="col-md-12">
+            <!-- CARD TABLE-->
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="row">
+                        <label class="col-md-3 form-label" style="margin-top:1em;">ID Phòng Live <b style="color: red;">(*)</b></label>
+                        <div class="col-md-4">
+                            <input id="_roomId" type="text" size="40" value="" class="form-control" placeholder="ID phòng live" required style="margin-top:0.5em;">
+                        </div>
+                        <div class="col-md-5" style="display:flex;justify-content:center;margin-top:0.5em;">
+                            <button id="_btnCreateOrJoinRoom" type="button" class="btn btn-success" onclick="createOrJoinRoom();">Tham gia</button>
+                            <button id="_btnLeaveRoom" type="button" class="btn btn-warning" onclick="leaveRoom();" disabled style="margin-left: 1em;">Rời khỏi</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h1 id="_roomStatus" class="room-status" style="margin-top:0.5em;margin-bottom:0.5em;"></h1>
+            </div>
+            <div class="row" style="">
+                <p id="_notification"></p>
+                <div id="videos">
+                    <div id="_videoGrid" class="grid-container" style=""></div>
+                </div>
+            </div>
+            <!-- /.CARD TABLE-->
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- CONTAINER CLOSED -->
+
+<div id="localVideo-container">
+    <video id="_localVideo" autoplay playsinline muted></video>
+</div>
+
+<!-- JQUERY JS v3.6.0 -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/assets/jquery.min.js"></script>
+<!-- BOOTSTRAP JS -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/assets/bootstrap.min.js"></script>
+<script>
+    $(async function () {
+    });
+</script>
+<!-- Hub -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/constWebRTC.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/lib/signalr/dist/browser/signalr.min.js"></script>
+<!-- WebRTC -->
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/lib/webrtc_adapter/adapter-latest.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/utilsRTC.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/webrtc.js"></script>
+<script src="https://raw.githubusercontent.com/thiagoTeams/liveroom/main/webRTC/js/liveMeshViewHub.js"></script>
+<script>
+    var userKey = userName = fullName = `Guest`;
+    $(function () {
+        userKey = userName = fullName = `Guest${Math.floor((Math.random() * 10000) + 1)}`
+        initializeLiveRTCHubSignalR(userKey, userName, fullName, false);
+    });
+    async function createOrJoinRoom() {
+        hubJoinRoom(userKey, userName, fullName);
+    }
+    async function leaveRoom() {
+        hubLeaveRoom(userKey, userName, fullName);
+    }
+</script>
+</body>
+</html>
