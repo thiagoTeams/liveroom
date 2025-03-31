@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>Phòng xem (Mesh)</title>
     <!-- BOOTSTRAP CSS -->
-    <link id="style" href="https://raw.githack.com/thiagoTeams/liveroom/main/assets/bootstrap.min.css" rel="stylesheet">
+    <link id="style" href="/assets/bootstrap.min.css" rel="stylesheet">
     <!-- WebRTC -->
     <link href='https://fonts.googleapis.com/css?family=Hind:300|Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/css/live_mesh_room.css">
+    <link rel="stylesheet" href="/webRTC/css/live_mesh_room.css">
 </head>
 <body>
 
@@ -63,24 +63,34 @@
 </div>
 
 <!-- JQUERY JS v3.6.0 -->
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/assets/jquery.min.js"></script>
+<script src="/assets/jquery.min.js"></script>
 <!-- BOOTSTRAP JS -->
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/assets/bootstrap.min.js"></script>
+<script src="/assets/bootstrap.min.js"></script>
 <script>
     $(async function () {
     });
 </script>
 <!-- Hub -->
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/js/constWebRTC.js"></script>
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/lib/signalr/dist/browser/signalr.min.js"></script>
+<script src="/webRTC/js/constWebRTC.js"></script>
+<script src="/webRTC/lib/signalr/dist/browser/signalr.min.js"></script>
 <!-- WebRTC -->
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/lib/webrtc_adapter/adapter-latest.js"></script>
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/js/utilsRTC.js"></script>
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/js/webrtc.js"></script>
-<script src="https://raw.githack.com/thiagoTeams/liveroom/main/webRTC/js/liveMeshViewHub.js"></script>
+<script src="/webRTC/lib/webrtc_adapter/adapter-latest.js"></script>
+<script src="/webRTC/js/utilsRTC.js"></script>
+<script src="/webRTC/js/webrtc.js"></script>
+<script src="/webRTC/js/liveMeshViewHub.js"></script>
 <script>
+    function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+            function(m,key,value) {
+                vars[key] = value;
+            });
+        return vars;
+    }
     var userKey = userName = fullName = `Guest`;
     $(function () {
+        var roomId = getUrlVars()["id"];
+        if (roomId) $('#_roomId').val(`${roomId}`);
         userKey = userName = fullName = `Guest${Math.floor((Math.random() * 10000) + 1)}`
         initializeLiveRTCHubSignalR(userKey, userName, fullName, false);
     });
