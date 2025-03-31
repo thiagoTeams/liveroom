@@ -28,12 +28,13 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="row">
                         <label class="col-md-3 form-label" style="margin-top:1em;">ID Phòng Live <b style="color: red;">(*)</b></label>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <input id="_roomId" type="text" size="40" value="" class="form-control" placeholder="ID phòng live" required style="margin-top:0.5em;">
                         </div>
-                        <div class="col-md-5" style="display:flex;justify-content:center;margin-top:0.5em;">
+                        <div class="col-md-6" style="display:flex;justify-content:center;margin-top:0.5em;">
                             <button id="_btnCreateOrJoinRoom" type="button" class="btn btn-success" onclick="createOrJoinRoom();">Tham gia</button>
                             <button id="_btnLeaveRoom" type="button" class="btn btn-warning" onclick="leaveRoom();" disabled style="margin-left: 1em;">Rời khỏi</button>
+                            <button id="_btnCopyLink" type="button" class="btn btn-warning" onclick="copyLink();" style="margin-left: 1em;">Sao chép</button>
                         </div>
                     </div>
                 </div>
@@ -111,7 +112,8 @@
 <script>
     var userKey = userName = fullName = `Streamer`;
     $(function () {
-        userKey = userName = fullName = `Streamer${Math.floor((Math.random() * 10000) + 1)}`;
+        userKey = userName = fullName = `Streamer${Math.floor((Math.random() * 100000000) + 1)}`;
+        console.log(userKey);
         initializeLiveRTCHubSignalR(userKey, userName, fullName, true);
     });
     async function createOrJoinRoom() {
@@ -125,6 +127,13 @@
     }
     async function swichOffScreen() {
         hubSwichOffScreen(userKey, userName, fullName);
+    }
+    async function copyLink() {
+        var roomId = $('#_roomId').val();
+        var domainLive = `${window.location.protocol}//${window.location.hostname}${(window.location.port ? ':' + window.location.port : ':7111')}`;
+        if (window.location.protocol === 'https:') domainLive = `${window.location.protocol}//${window.location.hostname}`;
+        var link = `${domainLive}/watch.html?id=${roomId}`;
+        navigator.clipboard.writeText(link);
     }
 </script>
 </body>

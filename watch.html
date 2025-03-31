@@ -91,7 +91,7 @@
     $(function () {
         var roomId = getUrlVars()["id"];
         if (roomId) $('#_roomId').val(`${roomId}`);
-        userKey = userName = fullName = `Guest${Math.floor((Math.random() * 10000) + 1)}`
+        userKey = userName = fullName = `Guest${Math.floor((Math.random() * 100000000) + 1)}`
         initializeLiveRTCHubSignalR(userKey, userName, fullName, false);
     });
     async function createOrJoinRoom() {
