@@ -22,10 +22,14 @@ const peerConnectionConfig = {
         }
         //
         // {
-        //     "url": "turn:117.3.248.224:443?transport=udp",
-        //     "username": "thiagoTeams",
-        //     "credential": "Abcd@1234"
-        // }
+        //     "urls": [
+        //         "turn:turn.kyoly.online:3478?transport=udp",
+        //         "turn:turn.kyoly.online:3478?transport=tcp",
+        //         "turns:turn.kyoly.online:5349?transport=tcp",
+        //     ],
+        //     "username": "test",
+        //     "credential": "test123",
+        // },
     ]
 }
 var domainLive = `${window.location.protocol}//${window.location.hostname}${(window.location.port ? ':' + window.location.port : ':7111')}`;
